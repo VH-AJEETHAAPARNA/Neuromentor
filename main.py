@@ -13,7 +13,7 @@ from typing import Optional, Dict, Any
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, UploadFile, File, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from sse_starlette.sse import EventSourceResponse
+# from sse_starlette.sse import EventSourceResponse
 from pydantic import BaseModel
 
 # ─── Load environment ──────────────────────────────────────────────────────────

@@ -13,7 +13,7 @@ from typing import Optional, Dict, Any
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, UploadFile, File, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-# from sse_starlette.sse import EventSourceResponse
+from sse_starlette.sse import EventSourceResponse
 from pydantic import BaseModel
 
 # ─── Load environment ──────────────────────────────────────────────────────────
@@ -41,11 +41,14 @@ app = FastAPI(title="NeuroMentor API", version="2.0")
 # )
 
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://neuromentor-bcca5.web.app",  # Firebase domain
-        "http://localhost:3000"               # for local testing
+        "http://localhost:3000",
+        "https://neuromentor-bcca5.web.app",
+        "https://neuromentor-bcca5.firebaseapp.com",
+        "*"  # temporarily allow all for testing
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -541,6 +544,6 @@ if __name__ == "__main__":
     print("  NeuroMentor Backend v2.0")
     print(f"  Gemini: {'Ready' if GEMINI_CLIENT is not None else 'CHECK GOOGLE_API_KEY'}")
     print(f"  MongoDB: {'Connected' if db is not None else 'Offline (non-fatal)'}")
-    print("  API: http://localhost:8000")
+    print("API: https://neuromentor.onrender.com")
     print("=" * 60)
-    uvicorn.run(app, host="127.0.0.1", port=8000, reload=False)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

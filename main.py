@@ -39,13 +39,19 @@ app = FastAPI(title="NeuroMentor API", version="2.0")
 #     allow_methods=["GET", "POST", "OPTIONS"],
 #     allow_headers=["*"],
 # )
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
+    allow_origins=[
+        "https://neuromentor-bcca5.web.app",  # Firebase domain
+        "http://localhost:3000"               # for local testing
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 

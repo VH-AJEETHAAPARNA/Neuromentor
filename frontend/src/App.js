@@ -660,7 +660,7 @@ function InsightsPanel({ pinnedNotes, activeChatId, theme }) {
     if (!searchQuery.trim()) return;
     setSearching(true);
     try {
-      const res = await fetch("http://localhost:8000/api/insights/search", {
+      const res = await fetch("https://neuromentor.onrender.com/api/insights/search", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: searchQuery })
@@ -1008,7 +1008,7 @@ function LoginScreen({ onLogin, theme }) {
     localStorage.setItem("nm_profile", JSON.stringify(profile));
     // Save to MongoDB Atlas for cross-device persistence
     try {
-      await fetch("http://127.0.0.1:8000/api/profile", {
+      await fetch("https://neuromentor.onrender.com/api/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profile)
@@ -1218,7 +1218,7 @@ function LoginScreen({ onLogin, theme }) {
 // ─── MAIN APP VIEW ─────────────────────────────────────────────────────────────
 export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem("nm_theme") || "dark");
-  // const [showLanding, setShowLanding] = useState(true);
+  
   const [user, setUser] = useState(() => {
     try {
       const raw = localStorage.getItem("nm_profile");
@@ -1439,7 +1439,7 @@ export default function App() {
       terminalRef.current = term;
 
       // Connect to WebSocket shell endpoint
-      const socket = new WebSocket("ws://localhost:8000/terminal");
+      const socket = new WebSocket("wss://neuromentor.onrender.com/terminal");
       wsRef.current = socket;
 
       socket.onopen = () => {
@@ -1497,7 +1497,7 @@ export default function App() {
       const currentSessionId = activeChat?.sessionId || sessionId;
       
       // Request roadmapping asynchronously
-      const taskRes = await fetch("http://localhost:8000/api/roadmap-task", {
+      const taskRes = await fetch("https://neuromentor.onrender.com/api/roadmap-task", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ projectName, sessionId: currentSessionId })
@@ -1509,7 +1509,7 @@ export default function App() {
       let roadmap = [];
       for (let i = 0; i < 20; i++) {
         await new Promise(r => setTimeout(r, 1000));
-        const checkRes = await fetch(`http://localhost:8000/api/roadmap-task/${taskId}`);
+        const checkRes = await fetch(`https://neuromentor.onrender.com/api/roadmap-task/${taskId}`);
         const checkData = await checkRes.json();
         if (checkData.status === "SUCCESS") {
           roadmap = checkData.roadmap;
@@ -1548,7 +1548,7 @@ export default function App() {
     try {
       const currentSessionId = activeChat?.sessionId || sessionId;
       const wsMessage = `User is building "${wsProject?.name}" on step "${step?.title}" (Goal: "${step?.goal}"). Monaco code:\n${wsCode}\n\nQuestion: ${msg}\n\nGuide using Socratic method only.`;
-      const res = await fetch("http://localhost:8000/run_sse", {
+      const res = await fetch("https://neuromentor.onrender.com/run_sse", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           app_name: "neuromentor", user_id: "user", session_id: currentSessionId, 
@@ -1575,7 +1575,7 @@ export default function App() {
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://localhost:8000/api/vision-ocr", {
+      const res = await fetch("https://neuromentor.onrender.com/api/ocr", {
         method: "POST",
         body: formData
       });
@@ -1629,7 +1629,7 @@ export default function App() {
     
     // First, try backend TTS route
     try {
-      const res = await fetch("http://localhost:8000/api/tts", {
+      const res = await fetch("https://neuromentor.onrender.com/api/tts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: cleanText, language_code: voiceLang === "ta" ? "ta-IN" : voiceLang === "hi" ? "hi-IN" : "en-US" })
@@ -1654,7 +1654,7 @@ export default function App() {
   const translatePhrase = async (phrase, targetLang) => {
     if (targetLang === "en") return phrase;
     try {
-      const res = await fetch("http://localhost:8000/api/translate", {
+      const res = await fetch("https://neuromentor.onrender.com/api/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: phrase, target_language: targetLang })
@@ -1679,7 +1679,7 @@ export default function App() {
     }
     const create = async () => {
       try { 
-        await fetch(`http://localhost:8000/apps/neuromentor/users/user/sessions/${sessionId}`, { 
+        await fetch(`https://neuromentor.onrender.com/apps/neuromentor/users/user/sessions/${sessionId}`, { 
           method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) 
         }); 
       } catch (e) { 
@@ -1706,7 +1706,7 @@ export default function App() {
     setChats(prev => [...prev, makeChat(id, user, newSessionId)]);
     setActiveChatId(id); setView("chat");
     try { 
-      await fetch(`http://localhost:8000/apps/neuromentor/users/user/sessions/${newSessionId}`, { 
+      await fetch(`https://neuromentor.onrender.com/apps/neuromentor/users/user/sessions/${newSessionId}`, { 
         method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) 
       }); 
     } catch {} 
@@ -1739,7 +1739,7 @@ export default function App() {
 
     try {
       const currentSessionId = activeChat?.sessionId || sessionId;
-      const res = await fetch("http://localhost:8000/run_sse", {
+      const res = await fetch("https://neuromentor.onrender.com/run_sse", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ app_name: "neuromentor", user_id: "user", session_id: currentSessionId, new_message: { role: "user", parts: [{ text: userMsg }] }, streaming: false })
       });
@@ -1760,7 +1760,7 @@ export default function App() {
       }
 
       // Semantic Vector Sync (save insight vector in background)
-      fetch("http://localhost:8000/api/insights/embeddings", {
+      fetch("https://neuromentor.onrender.com/api/insights/embeddings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: agentText, sessionId: currentSessionId })
@@ -2614,7 +2614,7 @@ export default function App() {
                       setUserProfile(updated);
                       // Sync to backend DB
                       try {
-                        await fetch("http://127.0.0.1:8000/api/profile", {
+                        await fetch("https://neuromentor.onrender.com/api/profile", {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
                           body: JSON.stringify(updated)

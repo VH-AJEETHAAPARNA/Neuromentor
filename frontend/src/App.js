@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import LandingPage from "./LandingPage";
 import { signInWithGoogle, signOutUser } from "./firebase";
 import Editor from "@monaco-editor/react";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -1217,6 +1218,7 @@ function LoginScreen({ onLogin, theme }) {
 // ─── MAIN APP VIEW ─────────────────────────────────────────────────────────────
 export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem("nm_theme") || "dark");
+  // const [showLanding, setShowLanding] = useState(true);
   const [user, setUser] = useState(() => {
     try {
       const raw = localStorage.getItem("nm_profile");
@@ -1235,6 +1237,8 @@ export default function App() {
       return null;
     } catch { return null; }
   });
+
+  const [showLanding, setShowLanding] = useState(true);
   
   const [view, setView] = useState("chat");
   const [chats, setChats] = useState([]);
@@ -1786,6 +1790,9 @@ export default function App() {
   }, []);
 
   // Onboarding gate
+  if (!user && showLanding) {
+  return <LandingPage onGetStarted={() => setShowLanding(false)} />;
+  }
   if (!user) {
     return (
       <>

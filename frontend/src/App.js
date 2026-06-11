@@ -1008,7 +1008,7 @@ function LoginScreen({ onLogin, theme }) {
     localStorage.setItem("nm_profile", JSON.stringify(profile));
     // Save to MongoDB Atlas for cross-device persistence
     try {
-      await fetch("http://127.0.0.1:8000/api/profile", {
+      await fetch("https://neuromentor.onrender.com/api/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profile)
@@ -1218,7 +1218,7 @@ function LoginScreen({ onLogin, theme }) {
 // ─── MAIN APP VIEW ─────────────────────────────────────────────────────────────
 export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem("nm_theme") || "dark");
-  // const [showLanding, setShowLanding] = useState(true);
+  
   const [user, setUser] = useState(() => {
     try {
       const raw = localStorage.getItem("nm_profile");

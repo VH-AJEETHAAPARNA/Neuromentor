@@ -3,3 +3,5 @@ uvicorn
 pymongo
 python-dotenv
 requests
+python-multipart
+google-generativeai

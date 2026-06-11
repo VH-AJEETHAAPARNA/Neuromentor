@@ -7,14 +7,15 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCZxGHgtQq-Ej1c0iJnZau0ao1thX5t9h8",
-  authDomain: "neuromentor-bcca5.firebaseapp.com",
-  projectId: "neuromentor-bcca5",
-  storageBucket: "neuromentor-bcca5.firebasestorage.app",
-  messagingSenderId: "274074643484",
-  appId: "1:274074643484:web:a8145ed5cf41cf39c343d9",
-  measurementId: "G-NRHCK3QB0S"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
+
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
